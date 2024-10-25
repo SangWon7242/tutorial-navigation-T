@@ -42,6 +42,7 @@ export default function App() {
       <Tab.Navigator screenOptions={screenOption}>
         {tabConfig.map((routeConfig) => (
           <Tab.Screen
+            key={routeConfig.name}
             name={routeConfig.name}
             component={routeConfig.component}
           />

@@ -1,4 +1,11 @@
-import { Button, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Button,
+  TextInput,
+  View,
+  Pressable,
+  Text,
+} from "react-native";
 import React, { useState } from "react";
 
 const TodoWriteScreen = ({ navigation, route }) => {
@@ -9,22 +16,62 @@ const TodoWriteScreen = ({ navigation, route }) => {
       <TextInput
         multiline
         placeholder="할 일을 작성해주세요."
-        style={{ height: 200, padding: 10, backgroundColor: "white" }}
+        style={{
+          height: 200,
+          padding: 10,
+          backgroundColor: "white",
+          borderWidth: 2,
+          borderRadius: 10,
+          margin: 10,
+          fontWeight: "bold",
+        }}
         value={todo}
         onChangeText={setTodo}
       />
-      <Button
-        title="작성"
-        onPress={() => {
-          navigation.navigate({
-            name: "Details",
-            params: { todo },
-            merge: true,
-          });
-        }}
-      />
+      <View style={style.btnBox}>
+        <Pressable
+          style={style.pressable}
+          onPress={() => {
+            navigation.navigate("TodoList", { todo });
+          }}
+        >
+          <Text style={style.text}>작성</Text>
+        </Pressable>
+        <Pressable
+          style={style.pressable}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Text style={style.text}>취소</Text>
+        </Pressable>
+      </View>
     </>
   );
 };
+
+const style = StyleSheet.create({
+  btnBox: {
+    flexDirection: "row",
+    justifyContent: "center",
+    margin: 10,
+    gap: 5,
+  },
+  pressable: {
+    borderRadius: 2,
+    borderWidth: 3,
+    width: "40%",
+    padding: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    width: "100%",
+    textAlign: "center",
+  },
+});
 
 export default TodoWriteScreen;
