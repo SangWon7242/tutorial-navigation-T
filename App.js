@@ -20,6 +20,8 @@ const useTodosState = () => {
     setTodos(newTodos);
   };
 
+  console.log(todos);
+
   return { todos, addTodo };
 };
 
