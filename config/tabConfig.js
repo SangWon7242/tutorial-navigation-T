@@ -9,6 +9,7 @@ import MyPageScreen from "../screens/MyPageScreen";
 const tabConfig = [
   {
     name: "Home",
+    title: "홈",
     component: HomeScreen,
     focusedIcon: "home-variant",
     unFocusedIcon: "home-variant-outline",
@@ -16,6 +17,7 @@ const tabConfig = [
   },
   {
     name: "TodoSearch",
+    title: "검색",
     component: TodoSearchScreen,
     focusedIcon: "search-sharp",
     unFocusedIcon: "search-outline",
@@ -23,6 +25,7 @@ const tabConfig = [
   },
   {
     name: "TodoWrite",
+    title: "할 일 작성",
     component: TodoWriteScreen,
     focusedIcon: "application-edit",
     unFocusedIcon: "application-edit-outline",
@@ -30,6 +33,7 @@ const tabConfig = [
   },
   {
     name: "TodoList",
+    title: "할 일 리스트",
     component: TodoListScreen,
     focusedIcon: "list-sharp",
     unFocusedIcon: "list-outline",
@@ -37,6 +41,7 @@ const tabConfig = [
   },
   {
     name: "MyPage",
+    title: "내 페이지",
     component: MyPageScreen,
     focusedIcon: "person-circle-sharp",
     unFocusedIcon: "person-circle-outline",

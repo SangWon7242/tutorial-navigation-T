@@ -45,6 +45,7 @@ export default function App() {
             key={routeConfig.name}
             name={routeConfig.name}
             component={routeConfig.component}
+            options={{ title: routeConfig.title }}
           />
         ))}
       </Tab.Navigator>
