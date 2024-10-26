@@ -1,14 +1,34 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import tabConfig from "./config/tabConfig";
+import { dateToStr } from "./utils/utils";
+
+const useTodosState = () => {
+  const [todos, setTodos] = useState([]);
+  const lastTodoIdRef = useRef(0);
+
+  const addTodo = (newContent) => {
+    const id = ++lastTodoIdRef.current;
+
+    const newTodo = { id, content: newContent, regDate: dateToStr(new Date()) };
+
+    const newTodos = [...todos, newTodo];
+    setTodos(newTodos);
+  };
+
+  return { todos, addTodo };
+};
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const todosState = useTodosState();
+  console.log(todosState);
+
   const screenOption = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
       // tabConfig에서 config name이 스크린 name이랑 일치하는지 확인
@@ -60,6 +80,7 @@ export default function App() {
             name={routeConfig.name}
             component={routeConfig.component}
             options={{ title: routeConfig.title }}
+            initialParams={{ todosState }}
           />
         ))}
       </Tab.Navigator>
