@@ -7,11 +7,11 @@ import {
   Text,
   Alert,
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 
 const TodoWriteScreen = ({ navigation, route }) => {
   const [todo, setTodo] = useState("");
-  const { addTodo } = route.params.todosState;
+  const { addTodo } = useContext(route.params.TodosContext);
 
   const handleAddTodo = () => {
     if (!todo.trim()) {

@@ -1,7 +1,8 @@
 import { Text, View, StyleSheet } from "react-native";
+import React, { useState, useContext } from "react";
 
 const TodoListScreen = ({ navigation, route }) => {
-  const { todos } = route.params?.todosState || { todos: [] };
+  const { todos } = useContext(route.params?.TodosContext);
 
   return (
     <View style={styles.container}>
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   listBox: {
+    marginTop: 5,
     borderRadius: 10,
     borderWidth: 2,
     width: "90%",

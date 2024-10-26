@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, createContext } from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -7,7 +7,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import tabConfig from "./config/tabConfig";
 import { dateToStr } from "./utils/utils";
 
-const useTodosState = () => {
+const TodosContext = createContext();
+
+const TodoProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
   const lastTodoIdRef = useRef(0);
 
@@ -22,14 +24,18 @@ const useTodosState = () => {
 
   console.log(todos);
 
-  return { todos, addTodo };
+  return (
+    <TodosContext.Provider value={{ todos, addTodo }}>
+      {children}
+    </TodosContext.Provider>
+  );
 };
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const todosState = useTodosState();
-  console.log(todosState);
+  // useTodosState 재렌더링이 되어 데이터가 유지 되지 않음
+  // const todosState = useTodosState();
 
   const screenOption = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
@@ -74,19 +80,21 @@ export default function App() {
   });
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator screenOptions={screenOption}>
-        {tabConfig.map((routeConfig) => (
-          <Tab.Screen
-            key={routeConfig.name}
-            name={routeConfig.name}
-            component={routeConfig.component}
-            options={{ title: routeConfig.title }}
-            initialParams={{ todosState }}
-          />
-        ))}
-      </Tab.Navigator>
-    </NavigationContainer>
+    <TodoProvider>
+      <NavigationContainer>
+        <Tab.Navigator screenOptions={screenOption}>
+          {tabConfig.map((routeConfig) => (
+            <Tab.Screen
+              key={routeConfig.name}
+              name={routeConfig.name}
+              component={routeConfig.component}
+              options={{ title: routeConfig.title }}
+              initialParams={{ TodosContext }}
+            />
+          ))}
+        </Tab.Navigator>
+      </NavigationContainer>
+    </TodoProvider>
   );
 }
 
