@@ -5,31 +5,7 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import tabConfig from "./config/tabConfig";
-import { dateToStr } from "./utils/utils";
-
-const TodosContext = createContext();
-
-const TodoProvider = ({ children }) => {
-  const [todos, setTodos] = useState([]);
-  const lastTodoIdRef = useRef(0);
-
-  const addTodo = (newContent) => {
-    const id = ++lastTodoIdRef.current;
-
-    const newTodo = { id, content: newContent, regDate: dateToStr(new Date()) };
-
-    const newTodos = [...todos, newTodo];
-    setTodos(newTodos);
-  };
-
-  console.log(todos);
-
-  return (
-    <TodosContext.Provider value={{ todos, addTodo }}>
-      {children}
-    </TodosContext.Provider>
-  );
-};
+import { TodoProvider } from "./components/TodosProvider";
 
 const Tab = createBottomTabNavigator();
 
@@ -89,7 +65,6 @@ export default function App() {
               name={routeConfig.name}
               component={routeConfig.component}
               options={{ title: routeConfig.title }}
-              initialParams={{ TodosContext }}
             />
           ))}
         </Tab.Navigator>

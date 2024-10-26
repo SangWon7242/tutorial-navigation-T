@@ -1,8 +1,9 @@
 import { Text, View, StyleSheet } from "react-native";
 import React, { useState, useContext } from "react";
+import TodosContext from "../components/TodosProvider";
 
 const TodoListScreen = ({ navigation, route }) => {
-  const { todos } = useContext(route.params?.TodosContext);
+  const { todos } = useContext(TodosContext);
 
   return (
     <View style={styles.container}>

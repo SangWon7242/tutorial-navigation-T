@@ -8,10 +8,11 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useRef, useContext } from "react";
+import TodosContext from "../components/TodosProvider";
 
 const TodoWriteScreen = ({ navigation, route }) => {
   const [todo, setTodo] = useState("");
-  const { addTodo } = useContext(route.params.TodosContext);
+  const { addTodo } = useContext(TodosContext);
 
   const handleAddTodo = () => {
     if (!todo.trim()) {
