@@ -1,5 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect, useRef, createContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  createContext,
+  useContext,
+} from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";

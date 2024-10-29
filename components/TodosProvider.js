@@ -1,4 +1,4 @@
-import React, { createContext, useState, useRef } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
 import { dateToStr } from "../utils/utils";
 
 const TodosContext = createContext();
@@ -37,10 +37,37 @@ export const TodosProvider = ({ children }) => {
     setTodos(newTodos);
   };
 
-  console.log(todos);
+  // console.log(todos);
+
+  const removeTodo = (id) => {
+    const newTodos = todos.filter((todo) => todo.id != id);
+    setTodos(newTodos);
+  };
+
+  const removeTodoById = (id) => {
+    const index = findTodoIndexById(id);
+
+    if (index != -1) {
+      removeTodo(index);
+    }
+  };
+
+  const findTodoIndexById = (id) => {
+    return todos.findIndex((todo) => todo.id == id);
+  };
+
+  const findTodoById = (id) => {
+    const index = findTodoIndexById(id);
+
+    if (index == -1) {
+      return null;
+    }
+
+    return todos[index];
+  };
 
   return (
-    <TodosContext.Provider value={{ todos, addTodo }}>
+    <TodosContext.Provider value={{ todos, addTodo, removeTodo }}>
       {children}
     </TodosContext.Provider>
   );
