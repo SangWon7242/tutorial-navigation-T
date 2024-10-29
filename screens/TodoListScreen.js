@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon, Button } from "@rneui/themed";
 
-const TodoListScreen = ({ navigation, route }) => {
+const TodoListScreen = () => {
   const { todos } = useContext(TodosContext);
 
   return (
