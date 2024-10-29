@@ -1,10 +1,28 @@
-import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  Alert,
+  Modal,
+  TextInput,
+} from "react-native";
 import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon, Button } from "@rneui/themed";
 
 const TodoListScreen = () => {
   const { todos, removeTodo } = useContext(TodosContext);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModifyModal = (reset) => {
+    reset();
+    setModalVisible(true);
+  };
+
+  const closeModifyModal = () => {
+    setModalVisible(false);
+  };
 
   const removeConfirm = (id, reset) => {
     Alert.alert(
@@ -39,7 +57,7 @@ const TodoListScreen = () => {
               style={styles.listBox}
               leftContent={(reset) => (
                 <Pressable
-                  onPress={() => reset()}
+                  onPress={() => openModifyModal(reset)}
                   style={{ ...styles.pressableBtn, backgroundColor: "blue" }}
                 >
                   <Icon name="update" color="white" />
@@ -65,6 +83,20 @@ const TodoListScreen = () => {
       ) : (
         <Text style={styles.emptyText}>할 일이 없습니다</Text>
       )}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <Pressable onPress={closeModifyModal} style={styles.modalContainer}>
+          <View style={styles.modalBox}>
+            <Text style={{ color: "#fff", fontSize: 30, fontWeight: "bold" }}>
+              수정 창
+            </Text>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 };
@@ -82,6 +114,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
 
