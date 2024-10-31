@@ -14,13 +14,16 @@ import { ListItem, Icon, Button } from "@rneui/themed";
 const TodoListScreen = () => {
   const { todos, removeTodo } = useContext(TodosContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modifiedContent, setModifiedContent] = useState("");
 
-  const openModifyModal = (reset) => {
+  const openModifyModal = (todo, reset) => {
+    setModifiedContent(todo.content);
     reset();
     setModalVisible(true);
   };
 
   const closeModifyModal = () => {
+    setModifiedContent(modifiedContent);
     setModalVisible(false);
   };
 
@@ -57,7 +60,7 @@ const TodoListScreen = () => {
               style={styles.listBox}
               leftContent={(reset) => (
                 <Pressable
-                  onPress={() => openModifyModal(reset)}
+                  onPress={() => openModifyModal(todo, reset)}
                   style={{ ...styles.pressableBtn, backgroundColor: "blue" }}
                 >
                   <Icon name="update" color="white" />
@@ -90,11 +93,16 @@ const TodoListScreen = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <Pressable onPress={closeModifyModal} style={styles.modalContainer}>
-          <View style={styles.modalBox}>
-            <Text style={{ color: "#fff", fontSize: 30, fontWeight: "bold" }}>
-              수정 창
-            </Text>
-          </View>
+          <Pressable style={styles.modalBox}>
+            <View style={styles.modalInner}>
+              <TextInput
+                style={styles.modalTextInput}
+                placeholder="수정할 할 일을 입력해주세요."
+                value={modifiedContent}
+                onChangeText={setModifiedContent}
+              ></TextInput>
+            </View>
+          </Pressable>
         </Pressable>
       </Modal>
     </View>
@@ -120,6 +128,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalBox: {
+    backgroundColor: "#fff",
+    borderWidth: 2,
+    borderRadius: 10,
+    width: "80%",
+    minHeight: "20%",
+  },
+  modalTextInput: {
+    padding: 20,
   },
 });
 
