@@ -7,18 +7,18 @@ export const TodosProvider = ({ children }) => {
   const testTodo = [
     {
       id: 1,
+      regDate: dateToStr(new Date()),
       content: "테니스 치기",
-      retDate: dateToStr(new Date()),
     },
     {
       id: 2,
+      regDate: dateToStr(new Date()),
       content: "리액트 네이티브 공부하기",
-      retDate: dateToStr(new Date()),
     },
     {
       id: 3,
+      regDate: dateToStr(new Date()),
       content: "할 일 앱 구현하기",
-      retDate: dateToStr(new Date()),
     },
   ];
 

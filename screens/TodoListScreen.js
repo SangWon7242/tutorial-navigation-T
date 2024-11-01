@@ -6,6 +6,7 @@ import {
   Alert,
   Modal,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
@@ -23,6 +24,11 @@ const TodoListScreen = () => {
   };
 
   const closeModifyModal = () => {
+    setModifiedContent(modifiedContent);
+    setModalVisible(false);
+  };
+
+  const closeModal = () => {
     setModifiedContent(modifiedContent);
     setModalVisible(false);
   };
@@ -95,12 +101,23 @@ const TodoListScreen = () => {
         <Pressable onPress={closeModifyModal} style={styles.modalContainer}>
           <Pressable style={styles.modalBox}>
             <View style={styles.modalInner}>
-              <TextInput
-                style={styles.modalTextInput}
-                placeholder="수정할 할 일을 입력해주세요."
-                value={modifiedContent}
-                onChangeText={setModifiedContent}
-              ></TextInput>
+              <View style={{ flexGrow: 1 }}>
+                <TextInput
+                  style={styles.modalTextInput}
+                  placeholder="수정할 할 일을 입력해주세요."
+                  value={modifiedContent}
+                  onChangeText={setModifiedContent}
+                  multiline
+                />
+              </View>
+              <View style={styles.modalBtnBox}>
+                <TouchableOpacity style={{}} onPress={closeModifyModal}>
+                  <Text style={styles.modalBtnText}>저장</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{}} onPress={closeModal}>
+                  <Text style={styles.modalBtnText}>취소</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </Pressable>
         </Pressable>
@@ -134,10 +151,25 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     width: "80%",
-    minHeight: "20%",
+    minHeight: 250,
+  },
+  modalInner: {
+    flex: 1,
   },
   modalTextInput: {
     padding: 20,
+  },
+  modalBtnBox: {
+    flex: 0.3,
+    flexDirection: "row",
+    flexShrink: 0,
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  modalBtnText: {
+    marginRight: 20,
+    fontSize: 15,
+    fontWeight: "bold",
   },
 });
 
