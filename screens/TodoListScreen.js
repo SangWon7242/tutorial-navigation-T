@@ -12,6 +12,88 @@ import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon, Button } from "@rneui/themed";
 
+const TodoListItem = ({ openModifyModal, todo, removeConfirm }) => {
+  return (
+    <View
+      style={{
+        marginTop: 5,
+        borderWidth: 3,
+        borderRadius: 18,
+        overflow: "hidden",
+      }}
+    >
+      <ListItem.Swipeable
+        bottomDivider
+        style={styles.listBox}
+        leftContent={(reset) => (
+          <Pressable
+            onPress={() => openModifyModal(todo, reset)}
+            style={{ ...styles.pressableBtn, backgroundColor: "blue" }}
+          >
+            <Icon name="update" color="white" />
+          </Pressable>
+        )}
+        rightContent={(reset) => (
+          <Pressable
+            onPress={() => removeConfirm(todo.id, reset)}
+            style={{ ...styles.pressableBtn, backgroundColor: "red" }}
+          >
+            <Icon name="delete" color="white" />
+          </Pressable>
+        )}
+      >
+        <ListItem.Content>
+          <ListItem.Title>번호 : {todo.id}</ListItem.Title>
+          <ListItem.Subtitle>작성날짜 : {todo.regDate}</ListItem.Subtitle>
+          <ListItem.Subtitle>할일 : {todo.content}</ListItem.Subtitle>
+        </ListItem.Content>
+      </ListItem.Swipeable>
+    </View>
+  );
+};
+
+const TodoModifyModal = ({
+  modifiedContent,
+  setModifiedContent,
+  modalVisible,
+  setModalVisible,
+  closeModifyModal,
+  closeModal,
+}) => {
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => setModalVisible(false)}
+    >
+      <Pressable onPress={closeModal} style={styles.modalContainer}>
+        <Pressable style={styles.modalBox}>
+          <View style={styles.modalInner}>
+            <View style={{ flexGrow: 1 }}>
+              <TextInput
+                style={styles.modalTextInput}
+                placeholder="수정할 할 일을 입력해주세요."
+                value={modifiedContent}
+                onChangeText={setModifiedContent}
+                multiline
+              />
+            </View>
+            <View style={styles.modalBtnBox}>
+              <TouchableOpacity style={{}} onPress={closeModifyModal}>
+                <Text style={styles.modalBtnText}>저장</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{}} onPress={closeModal}>
+                <Text style={styles.modalBtnText}>취소</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+};
+
 const TodoListScreen = () => {
   const { todos, removeTodo, modifyTodo } = useContext(TodosContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -66,76 +148,24 @@ const TodoListScreen = () => {
     <View style={styles.container}>
       {todos.length > 0 ? (
         todos.map((todo) => (
-          <View
+          <TodoListItem
             key={todo.id}
-            style={{
-              marginTop: 5,
-              borderWidth: 3,
-              borderRadius: 18,
-              overflow: "hidden",
-            }}
-          >
-            <ListItem.Swipeable
-              bottomDivider
-              style={styles.listBox}
-              leftContent={(reset) => (
-                <Pressable
-                  onPress={() => openModifyModal(todo, reset)}
-                  style={{ ...styles.pressableBtn, backgroundColor: "blue" }}
-                >
-                  <Icon name="update" color="white" />
-                </Pressable>
-              )}
-              rightContent={(reset) => (
-                <Pressable
-                  onPress={() => removeConfirm(todo.id, reset)}
-                  style={{ ...styles.pressableBtn, backgroundColor: "red" }}
-                >
-                  <Icon name="delete" color="white" />
-                </Pressable>
-              )}
-            >
-              <ListItem.Content>
-                <ListItem.Title>번호 : {todo.id}</ListItem.Title>
-                <ListItem.Subtitle>작성날짜 : {todo.regDate}</ListItem.Subtitle>
-                <ListItem.Subtitle>할일 : {todo.content}</ListItem.Subtitle>
-              </ListItem.Content>
-            </ListItem.Swipeable>
-          </View>
+            openModifyModal={openModifyModal}
+            todo={todo}
+            removeConfirm={removeConfirm}
+          />
         ))
       ) : (
         <Text style={styles.emptyText}>할 일이 없습니다</Text>
       )}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <Pressable onPress={closeModifyModal} style={styles.modalContainer}>
-          <Pressable style={styles.modalBox}>
-            <View style={styles.modalInner}>
-              <View style={{ flexGrow: 1 }}>
-                <TextInput
-                  style={styles.modalTextInput}
-                  placeholder="수정할 할 일을 입력해주세요."
-                  value={modifiedContent}
-                  onChangeText={setModifiedContent}
-                  multiline
-                />
-              </View>
-              <View style={styles.modalBtnBox}>
-                <TouchableOpacity style={{}} onPress={closeModifyModal}>
-                  <Text style={styles.modalBtnText}>저장</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{}} onPress={closeModal}>
-                  <Text style={styles.modalBtnText}>취소</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
+      <TodoModifyModal
+        modifiedContent={modifiedContent}
+        setModifiedContent={setModifiedContent}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        closeModifyModal={closeModifyModal}
+        closeModal={closeModal}
+      />
     </View>
   );
 };
