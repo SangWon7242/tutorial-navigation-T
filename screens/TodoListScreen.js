@@ -7,12 +7,15 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon, Button } from "@rneui/themed";
 
-const TodoListItem = ({ openModifyModal, todo, removeConfirm }) => {
+const TodoListItem = ({ todo, onModify, onRemove }) => {
+  console.log(todo.id);
+
   return (
     <View
       style={{
@@ -27,7 +30,7 @@ const TodoListItem = ({ openModifyModal, todo, removeConfirm }) => {
         style={styles.listBox}
         leftContent={(reset) => (
           <Pressable
-            onPress={() => openModifyModal(todo, reset)}
+            onPress={() => onModify(todo, reset)}
             style={{ ...styles.pressableBtn, backgroundColor: "blue" }}
           >
             <Icon name="update" color="white" />
@@ -35,7 +38,7 @@ const TodoListItem = ({ openModifyModal, todo, removeConfirm }) => {
         )}
         rightContent={(reset) => (
           <Pressable
-            onPress={() => removeConfirm(todo.id, reset)}
+            onPress={() => onRemove(todo.id, reset)}
             style={{ ...styles.pressableBtn, backgroundColor: "red" }}
           >
             <Icon name="delete" color="white" />
@@ -147,14 +150,17 @@ const TodoListScreen = () => {
   return (
     <View style={styles.container}>
       {todos.length > 0 ? (
-        todos.map((todo) => (
-          <TodoListItem
-            key={todo.id}
-            openModifyModal={openModifyModal}
-            todo={todo}
-            removeConfirm={removeConfirm}
-          />
-        ))
+        <FlatList
+          data={todos}
+          renderItem={({ item }) => (
+            <TodoListItem
+              todo={item}
+              onModify={openModifyModal}
+              onRemove={removeConfirm}
+            />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
       ) : (
         <Text style={styles.emptyText}>할 일이 없습니다</Text>
       )}
