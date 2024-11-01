@@ -14,6 +14,13 @@ import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon, Button } from "@rneui/themed";
 
 const TodoListItem = ({ todo, onModify, onRemove }) => {
+  // 클릭 시 확장/축소를 제어하는 상태 추가
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <View
       style={{
@@ -46,16 +53,18 @@ const TodoListItem = ({ todo, onModify, onRemove }) => {
         <ListItem.Content>
           <ListItem.Title>번호 : {todo.id}</ListItem.Title>
           <ListItem.Subtitle>작성날짜 : {todo.regDate}</ListItem.Subtitle>
-          {/* View로 감싸고 Text에 numberOfLines 적용 */}
-          <View style={styles.contentContainer}>
+          {/* 클릭 시 확장/축소 기능 추가 */}
+          <Pressable onPress={toggleExpand} style={styles.contentContainer}>
             <Text
-              numberOfLines={2}
+              // 텍스트가 최대 2줄까지만 표시
+              numberOfLines={isExpanded ? null : 2} // 클릭 시 전체 내용 표시
+              // 텍스트가 지정된 줄 수를 넘을 경우, 텍스트의 끝에 ...이 표시
               ellipsizeMode="tail"
               style={styles.contentText}
             >
               할일 : {todo.content}
             </Text>
-          </View>
+          </Pressable>
         </ListItem.Content>
       </ListItem.Swipeable>
     </View>
