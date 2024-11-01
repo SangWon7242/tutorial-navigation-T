@@ -13,19 +13,25 @@ import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon, Button } from "@rneui/themed";
 
 const TodoListScreen = () => {
-  const { todos, removeTodo } = useContext(TodosContext);
+  const { todos, removeTodo, modifyTodo } = useContext(TodosContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedTodoId, setSelectedTodoId] = useState(null);
   const [modifiedContent, setModifiedContent] = useState("");
 
   const openModifyModal = (todo, reset) => {
     setModifiedContent(todo.content);
+    setSelectedTodoId(todo.id);
     reset();
     setModalVisible(true);
   };
 
   const closeModifyModal = () => {
-    setModifiedContent(modifiedContent);
+    if (selectedTodoId !== null) {
+      modifyTodo(selectedTodoId, modifiedContent); // 수정된 내용 반영
+    }
+
     setModalVisible(false);
+    setSelectedTodoId(null);
   };
 
   const closeModal = () => {
@@ -60,7 +66,15 @@ const TodoListScreen = () => {
     <View style={styles.container}>
       {todos.length > 0 ? (
         todos.map((todo) => (
-          <View key={todo.id} style={{ marginTop: 5 }}>
+          <View
+            key={todo.id}
+            style={{
+              marginTop: 5,
+              borderWidth: 3,
+              borderRadius: 18,
+              overflow: "hidden",
+            }}
+          >
             <ListItem.Swipeable
               bottomDivider
               style={styles.listBox}
@@ -132,9 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     margin: 3,
   },
-  listBox: {
-    borderWidth: 2,
-  },
+  listBox: {},
   pressableBtn: {
     flex: 1,
     alignItems: "center",

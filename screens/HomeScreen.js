@@ -5,14 +5,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate("Details")}
-      />
-      <Button
-        title="새 할 일 작성"
-        onPress={() => navigation.navigate("TodoWrite")}
-      />
     </View>
   );
 };

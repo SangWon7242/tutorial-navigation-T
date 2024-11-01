@@ -44,30 +44,16 @@ export const TodosProvider = ({ children }) => {
     setTodos(newTodos);
   };
 
-  const removeTodoById = (id) => {
-    const index = findTodoIndexById(id);
+  const modifyTodo = (id, newContent) => {
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, content: newContent } : todo
+    );
 
-    if (index != -1) {
-      removeTodo(index);
-    }
-  };
-
-  const findTodoIndexById = (id) => {
-    return todos.findIndex((todo) => todo.id == id);
-  };
-
-  const findTodoById = (id) => {
-    const index = findTodoIndexById(id);
-
-    if (index == -1) {
-      return null;
-    }
-
-    return todos[index];
+    setTodos(newTodos);
   };
 
   return (
-    <TodosContext.Provider value={{ todos, addTodo, removeTodo }}>
+    <TodosContext.Provider value={{ todos, addTodo, removeTodo, modifyTodo }}>
       {children}
     </TodosContext.Provider>
   );
