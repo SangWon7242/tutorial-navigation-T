@@ -14,8 +14,6 @@ import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon, Button } from "@rneui/themed";
 
 const TodoListItem = ({ todo, onModify, onRemove }) => {
-  console.log(todo.id);
-
   return (
     <View
       style={{
@@ -48,7 +46,16 @@ const TodoListItem = ({ todo, onModify, onRemove }) => {
         <ListItem.Content>
           <ListItem.Title>번호 : {todo.id}</ListItem.Title>
           <ListItem.Subtitle>작성날짜 : {todo.regDate}</ListItem.Subtitle>
-          <ListItem.Subtitle>할일 : {todo.content}</ListItem.Subtitle>
+          {/* View로 감싸고 Text에 numberOfLines 적용 */}
+          <View style={styles.contentContainer}>
+            <Text
+              numberOfLines={2}
+              ellipsizeMode="tail"
+              style={styles.contentText}
+            >
+              할일 : {todo.content}
+            </Text>
+          </View>
         </ListItem.Content>
       </ListItem.Swipeable>
     </View>
@@ -160,6 +167,7 @@ const TodoListScreen = () => {
             />
           )}
           keyExtractor={(item) => item.id.toString()}
+          // FlatList는 각 항목별 식별하기 위한 고유키가 필요하다.
         />
       ) : (
         <Text style={styles.emptyText}>할 일이 없습니다</Text>
@@ -187,6 +195,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  contentContainer: {
+    width: "100%", // 필요한 경우 너비 설정
   },
   modalContainer: {
     flex: 1,
