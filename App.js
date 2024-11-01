@@ -1,19 +1,36 @@
-import { StatusBar } from "expo-status-bar";
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  createContext,
-  useContext,
-} from "react";
+import React from "react";
 import { StyleSheet } from "react-native";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import tabConfig from "./config/tabConfig";
 import { TodosProvider } from "./components/TodosProvider";
+import { Text, View, SafeAreaView, StatusBar, Image } from "react-native";
 
 const Tab = createBottomTabNavigator();
+
+const CustomHeader = ({ title }) => {
+  return (
+    <>
+      <SafeAreaView style={styles.safeArea}>
+        {/* StatusBar 설정 추가 */}
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <View style={styles.headerContainer}>
+          <View style={styles.headerInner}>
+            <View style={styles.logoBox}>
+              <Image
+                source={require("./assets/images/logo.jpg")}
+                style={styles.logo}
+              />
+            </View>
+            <View style={styles.titleBox}>
+              <Text style={styles.headerTitle}>{title}</Text>
+            </View>
+          </View>
+        </View>
+      </SafeAreaView>
+    </>
+  );
+};
 
 export default function App() {
   // useTodosState 재렌더링이 되어 데이터가 유지 되지 않음
@@ -33,20 +50,6 @@ export default function App() {
       const IconComponent = routeConfig.iconCompnent;
 
       return <IconComponent name={iconName} size={size} color={color} />;
-    },
-    headerTitleAlign: "center",
-    headerTitleStyle: {
-      fontSize: 20,
-      fontWeight: "bold",
-    },
-    headerStyle: {
-      // Android
-      elevation: 8,
-      // iOS
-      shadowColor: "#000",
-      shadowOpacity: 0.3,
-      shadowOffset: { width: 0, height: 2 },
-      shadowRadius: 4,
     },
     tabBarActiveTintColor: "#0163d2",
     tabBarInactiveTintColor: "black",
@@ -70,7 +73,10 @@ export default function App() {
               key={routeConfig.name}
               name={routeConfig.name}
               component={routeConfig.component}
-              options={{ title: routeConfig.title }}
+              options={{
+                title: routeConfig.title,
+                header: () => <CustomHeader title={routeConfig.title} />,
+              }}
             />
           ))}
         </Tab.Navigator>
@@ -85,6 +91,41 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  safeArea: {
+    backgroundColor: "#fff",
+  },
+  headerContainer: {
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  headerInner: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  logoBox: {
+    flexGrow: 1,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginLeft: 10,
+  },
+  titleBox: {
+    flexGrow: 1,
+    alignItems: "flex-end",
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginRight: 20,
   },
   text: {
     fontSize: 30,
