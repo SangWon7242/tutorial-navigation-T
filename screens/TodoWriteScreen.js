@@ -9,10 +9,14 @@ import {
 } from "react-native";
 import React, { useState, useRef, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
+import AppLoadingContext from "../components/AppLoadingProvider";
 
 const TodoWriteScreen = ({ navigation, route }) => {
   const [todo, setTodo] = useState("");
   const { addTodo } = useContext(TodosContext);
+  const { fontsLoaded } = useContext(AppLoadingContext);
+
+  const customFont = fontsLoaded ? "my-custom-font" : "System";
 
   const handleAddTodo = () => {
     if (!todo.trim()) {
@@ -36,6 +40,7 @@ const TodoWriteScreen = ({ navigation, route }) => {
               fontSize: 20,
               fontWeight: "bold",
               padding: 10,
+              fontFamily: customFont,
             }}
             value={todo}
             onChangeText={setTodo}
@@ -43,7 +48,7 @@ const TodoWriteScreen = ({ navigation, route }) => {
         </View>
         <View style={style.btnBox}>
           <Pressable style={style.pressable} onPress={handleAddTodo}>
-            <Text style={style.text}>작성</Text>
+            <Text style={{ ...style.text, fontFamily: customFont }}>작성</Text>
           </Pressable>
           <Pressable
             style={style.pressable}
