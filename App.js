@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import tabConfig from "./config/tabConfig";
 import { TodosProvider } from "./components/TodosProvider";
 import { Text, View, SafeAreaView, StatusBar, Image } from "react-native";
+import * as Font from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 const Tab = createBottomTabNavigator();
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    "my-custom-font": require("./assets/fonts/GmarketSansTTFBold.ttf"), // 사용자 정의 폰트
+  });
+};
 
 const CustomHeader = ({ title }) => {
   return (
@@ -35,6 +43,30 @@ const CustomHeader = ({ title }) => {
 export default function App() {
   // useTodosState 재렌더링이 되어 데이터가 유지 되지 않음
   // const todosState = useTodosState();
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadResources = async () => {
+      try {
+        await fetchFonts(); // 폰트 로드
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // 예시로 2초 대기
+      } catch (e) {
+        console.warn(e); // 로드 중 오류 발생 시 경고
+      } finally {
+        setFontsLoaded(true); // 폰트 로드 완료 상태 업데이트
+        await SplashScreen.hideAsync(); // 폰트 로드가 완료되면 스플래시 스크린 숨기기
+      }
+    };
+
+    // 스플래시 스크린이 자동으로 숨겨지지 않도록 설정
+    SplashScreen.preventAutoHideAsync();
+
+    loadResources(); // 리소스 로드 시작
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // 폰트가 로드되지 않았을 때 아무것도 렌더링하지 않음
+  }
 
   const screenOption = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
@@ -57,6 +89,7 @@ export default function App() {
       fontSize: 12,
       paddingBottom: 10,
       fontWeight: 600,
+      fontFamily: "my-custom-font",
     },
     tabBarStyle: {
       height: 70,
@@ -105,10 +138,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
   logoBox: {
     flexGrow: 1,
   },
@@ -123,9 +152,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 23,
     fontWeight: "bold",
     marginRight: 20,
+    fontFamily: "my-custom-font",
   },
   text: {
     fontSize: 30,
