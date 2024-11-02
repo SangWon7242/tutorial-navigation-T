@@ -56,7 +56,7 @@ const TodoWriteScreen = ({ navigation, route }) => {
               navigation.goBack();
             }}
           >
-            <Text style={style.text}>취소</Text>
+            <Text style={{ ...style.text, fontFamily: customFont }}>취소</Text>
           </Pressable>
         </View>
       </View>

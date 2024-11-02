@@ -12,6 +12,7 @@ import {
 import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon, Button } from "@rneui/themed";
+import AppLoadingContext from "../components/AppLoadingProvider";
 
 const TodoListItem = ({ todo, onModify, onRemove }) => {
   // 클릭 시 확장/축소를 제어하는 상태 추가
@@ -28,6 +29,8 @@ const TodoListItem = ({ todo, onModify, onRemove }) => {
         borderWidth: 3,
         borderRadius: 18,
         overflow: "hidden",
+        marginVertical: "1%",
+        marginHorizontal: "1.5%",
       }}
     >
       <ListItem.Swipeable
@@ -52,7 +55,7 @@ const TodoListItem = ({ todo, onModify, onRemove }) => {
       >
         <ListItem.Content>
           <ListItem.Title>번호 : {todo.id}</ListItem.Title>
-          <ListItem.Subtitle>작성날짜 : {todo.regDate}</ListItem.Subtitle>
+          <Text>작성날짜 : {todo.regDate}</Text>
           {/* 클릭 시 확장/축소 기능 추가 */}
           <Pressable onPress={toggleExpand} style={styles.contentContainer}>
             <Text
@@ -72,6 +75,7 @@ const TodoListItem = ({ todo, onModify, onRemove }) => {
 };
 
 const TodoModifyModal = ({
+  customFont,
   modifiedContent,
   setModifiedContent,
   modalVisible,
@@ -91,10 +95,11 @@ const TodoModifyModal = ({
           <View style={styles.modalInner}>
             <View style={{ flexGrow: 1 }}>
               <TextInput
-                style={styles.modalTextInput}
+                style={{ ...styles.modalTextInput, fontFamily: customFont }}
                 placeholder="수정할 할 일을 입력해주세요."
                 value={modifiedContent}
                 onChangeText={setModifiedContent}
+                maxLength={100} // 최대 100자까지 입력 가능
                 multiline
               />
             </View>
@@ -115,9 +120,12 @@ const TodoModifyModal = ({
 
 const TodoListScreen = () => {
   const { todos, removeTodo, modifyTodo } = useContext(TodosContext);
+  const { fontsLoaded } = useContext(AppLoadingContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(null);
   const [modifiedContent, setModifiedContent] = useState("");
+
+  const customFont = fontsLoaded ? "my-custom-font" : "System";
 
   const openModifyModal = (todo, reset) => {
     setModifiedContent(todo.content);
@@ -182,6 +190,7 @@ const TodoListScreen = () => {
         <Text style={styles.emptyText}>할 일이 없습니다</Text>
       )}
       <TodoModifyModal
+        customFont={customFont}
         modifiedContent={modifiedContent}
         setModifiedContent={setModifiedContent}
         modalVisible={modalVisible}
@@ -197,7 +206,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    margin: 3,
   },
   listBox: {},
   pressableBtn: {
@@ -228,9 +236,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalBtnBox: {
-    flex: 0.3,
     flexDirection: "row",
-    flexShrink: 0,
+    paddingVertical: 10,
     alignItems: "center",
     justifyContent: "flex-end",
   },

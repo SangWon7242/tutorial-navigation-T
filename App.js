@@ -66,7 +66,7 @@ const AppWithNavigation = () => {
       fontFamily: "my-custom-font",
     },
     tabBarStyle: {
-      height: 70,
+      height: "10%",
       paddingTop: 5,
     },
   });
